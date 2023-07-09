@@ -6,6 +6,7 @@ export default async function getUsers(request: Request, response: Response) {
     let users = await db.getUsers();
     response.status(200).json(users);
   } catch (err) {
+    console.error(err);
     return response.json({ failure: "Internal server error" });
   }
 }

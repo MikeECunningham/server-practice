@@ -13,15 +13,12 @@ import createUser from "./endpoints/unprotected/createUser";
 import deleteUser from "./endpoints/protected/deleteUser";
 import authenticate from "./middlewares/basicAuth";
 
-const httpsPrivate = fs.readFileSync("../key.pem", "utf8");
-const httpsCertificate = fs.readFileSync("../cert.pem", "utf8");
-const credentials = { key: httpsPrivate, cert: httpsCertificate };
 const app: Express = express();
 const port = config.port;
 
-const allowedOrigins = ["http://localhost:4200"];
+// const allowedOrigins = ["http://localhost:4200"];
 const options: cors.CorsOptions = {
-  origin: allowedOrigins
+  // origin: allowedOrigins
 };
 app.use(cors(options));
 
