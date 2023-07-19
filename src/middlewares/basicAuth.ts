@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import basicAuth, { BasicAuthResult } from 'basic-auth';
+import config from "../config";
 
 export default function authenticate(request: Request, response: Response, next: NextFunction): void {
   const credentials: BasicAuthResult | undefined = basicAuth(request);
@@ -12,5 +13,5 @@ export default function authenticate(request: Request, response: Response, next:
 }
 
 function isValidCredentials(username: string, password: string): boolean {
-  return username === "admin" && password === "password";
+  return username === config.basicAuthUser && password === config.basicAuthSecret;
 }

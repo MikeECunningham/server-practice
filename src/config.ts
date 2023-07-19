@@ -6,6 +6,8 @@ dotenv.config();
 const config: Config = {
   version: 1,
   port: parseInt(process.env.PORT as string),
+  basicAuthUser: (process.env.BA_USER as string),
+  basicAuthSecret: (process.env.BA_PASSWORD as string),
   bodyParserMax: "4MB",
   urlEncodedMax: "1MB",
   databaseOptions: {

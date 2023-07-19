@@ -4,7 +4,9 @@ import * as bodyParser from "body-parser";
 import * as basicAuth from "express-basic-auth";
 import https from "https";
 import fs from "fs";
+import * as db from "./queries";
 import config from "./config";
+import { connectDB } from "./db/ormConfig";
 import displayHome from "./endpoints/displayHome";
 import getUsers from "./endpoints/unprotected/getUsers";
 import getUserById from "./endpoints/unprotected/getUserById";
@@ -12,6 +14,11 @@ import updateUser from "./endpoints/protected/updateUser";
 import createUser from "./endpoints/unprotected/createUser";
 import deleteUser from "./endpoints/protected/deleteUser";
 import authenticate from "./middlewares/basicAuth";
+
+let db_res = db.init();
+if (!db_res) {
+  throw "DB init returned falsey: " + db_res;
+}
 
 const app: Express = express();
 const port = config.port;
@@ -31,7 +38,7 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
 app.get("/", displayHome);
 app.get("/users", getUsers);
 app.get("/users/:id", getUserById);
-app.post("users", createUser);
+app.post("/users", createUser);
 
 app.use(authenticate);
 app.put("/auth/users/:id", updateUser);

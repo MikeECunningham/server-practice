@@ -5,7 +5,8 @@ import * as db from "../../queries";
 const createUserSchema: Schema = {
   type: "object",
   properties: {
-    name: { type: "string" },
+    firstName: { type: "string" },
+    lastName: { type: "string" },
     email: { type: "string" }
   },
   required: ["name", "email"],
@@ -17,7 +18,7 @@ export default async function createUser(request: CreateUserRequest, response: R
     let valid = validate(request.body, createUserSchema);
     if (valid.valid) {
       request.body.email = request.body.email.toLocaleLowerCase().trim();
-      let id = await db.createUser(request.body.name, request.body.email);
+      let id = await db.createUser(request.body.firstName, request.body.lastName, request.body.email);
       if (!!id) {
         return response.status(200).json({id});
       }
@@ -32,7 +33,8 @@ export default async function createUser(request: CreateUserRequest, response: R
 
 interface CreateUserRequest extends Request {
   body: {
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
   };
 }

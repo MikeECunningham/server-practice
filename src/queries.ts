@@ -9,6 +9,25 @@ const pool = new Pool({
   port: config.databaseOptions.port,
 });
 
+export async function init() {
+  try {
+    let created = await pool.query(
+      `
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        firstName VARCHAR(200),
+        lastName VARCHAR(200),
+        email VARCHAR(254) UNIQUE,
+      )
+      `
+    );
+    return created;
+  } catch (err) {
+    console.error("Problem in DB init: " + err);
+    return null;
+  }
+}
+
 export async function getUsers() {
   let query = await pool.query("SELECT * FROM users ORDER BY id ASC");
   if (query.rows.length > 0) {
@@ -16,11 +35,11 @@ export async function getUsers() {
   }
   return [];
 }
-export async function createUser(name: string, email: string) {
+export async function createUser(firstName: string, lastName: string, email: string) {
   try {
     let results = await pool.query(
-      "INSERT INTO users (name, email) values ($1, $2) RETURNING *",
-      [name, email]
+      "INSERT INTO users (firstName, lastName, email) values ($1, $2, $3) RETURNING *",
+      [firstName, lastName, email]
     );
     if (results.rows.length > 0) {
       return results.rows[0].id;
@@ -42,6 +61,6 @@ export async function getUserById(id: string) {
   return null;
 }
 
-export async function updateUser(name: string, email: string, id: string) {
+export async function updateUser(firstName: string, lastName: string, email: string, id: string) {
 
 }
