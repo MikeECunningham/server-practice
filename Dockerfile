@@ -13,9 +13,12 @@ RUN npm install
 # Copy the TypeScript source code
 COPY ./src ./src
 
+# Copy our scripts
+COPY ./scripts ./scripts
+
 # Expose the server's port
 EXPOSE 8000
 
 # Start the server
-CMD npm run dev
-# RUN npm run dev
+# CMD ["sh", "./docker-startup.sh"]
+CMD npm run prod

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { Schema, validate } from "jsonschema";
 import * as db from "../../queries";
 
@@ -13,7 +13,7 @@ const createUserSchema: Schema = {
   additionalProperties: false,
 }
 
-export default async function createUser(request: CreateUserRequest, response: Response) {
+export default async function createUser(request: CreateUserRequest, response: Response, next: NextFunction) {
   try {
     let valid = validate(request.body, createUserSchema);
     if (valid.valid) {

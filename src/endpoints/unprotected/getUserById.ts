@@ -1,6 +1,8 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { Schema, validate } from "jsonschema";
-import * as db from "../../queries";
+import * as db from "../../db/queries";
+import { ResponseUtl } from "../../middlewares/response";
+import { User } from "../../db/entity/user";
 
 // const getUserByIdSchema: Schema = {
 //   type: "object",
@@ -11,17 +13,14 @@ import * as db from "../../queries";
 //   additionalProperties: false,
 // }
 
-export default async function getUserById(request: Request, response: Response) {
-  try {
-      let user: any[] = await db.getUserById(request.params.id);
-      if (!!user) {
-        return response.status(200).json({user});
-      }
-      return response.status(404).json({failure: "ID not found"});
-  } catch (err) {
-    console.error(err);
-    return response.status(500).json({failure: "Internal server error"});
-  }
+export default async function getUserById(request: Request, response: Response, next: NextFunction) {
+  // try {
+    let user = await db.getUserById(parseInt(request.params.id));
+      return ResponseUtl.sendResponse<User>(response, "User Found", user);
+  // } catch (err) {
+  //   console.error(err);
+  //   return response.status(500).json({failure: "Internal server error"});
+  // }
 }
 
 // interface GetUserByIdRequest extends Request {
